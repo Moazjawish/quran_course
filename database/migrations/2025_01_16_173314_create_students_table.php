@@ -17,13 +17,14 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string("certificate");
-            $table->file("student_img");
+            $table->string("student_img");
             $table->date("birth_date");
             $table->string("quran_memorized_parts")->nullable();
             $table->string("quran_passed_parts")->nullable();
             $table->string("phone_number");
             $table->string("address");
             $table->date("enroll_date");
+            $table->string('reset_password_token')->nullable();
             $table->timestamps();
         });
     }

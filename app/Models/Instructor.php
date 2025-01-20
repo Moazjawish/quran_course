@@ -11,18 +11,18 @@ class Instructor extends Model
     use HasFactory;
     public function tahfeezCourse()
     {
-        return $this->belongsTo(TahfeezCourse::class, 'instructor_id');
+        return $this->belongsTo(TahfeezCourse::class);
     }
 
     public function lessons()
     {
-        return $this->belongsTo(Lesson::class, 'instructor_id');
+        return $this->belongsTo(Lesson::class);
     }
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class)->withTimestamps();
+        return $this->belongsToMany(Course::class, 'course_instrcutor');
     }
 
-    
+
 }

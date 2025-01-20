@@ -14,10 +14,15 @@ return new class extends Migration
     {
         Schema::create('tahfeez_courses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id', Student::class);
-            $table->foreignId('instructor_id', Instructor::class);
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('instructor_id');
             $table->dateTime("group_join_date")->nullable();
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
             $table->timestamps();
+
+
+
         });
     }
 

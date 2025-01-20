@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('certificate');
-            $table->file('instructor_img');
+            $table->string('instructor_img');
             $table->string('phone_number');
             $table->string('quran_memorized_parts');
             $table->string('quran_passed_parts')->nullable();

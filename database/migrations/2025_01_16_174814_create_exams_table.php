@@ -14,10 +14,12 @@ return new class extends Migration
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id',  Course::class);
+            $table->unsignedBigInteger('course_id');
             $table->dateTime('exam_date');
             $table->float('max_mark');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 

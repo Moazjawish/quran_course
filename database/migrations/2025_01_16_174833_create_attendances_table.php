@@ -15,12 +15,16 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id' , Lesson::class);
-            $table->foreignId('student_id' , Student::class);
+            $table->unsignedBigInteger('lesson_id');
+            $table->unsignedBigInteger('student_id');
             $table->boolean('student_attendance');
             $table->dateTime('student_attendance_time')->nullable();
             $table->float('recitation_per_page')->nullable();
+            $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->timestamps();
+
+
         });
     }
 

@@ -12,7 +12,7 @@ class Lesson extends Model
 
     public function courses()
     {
-        return $this->belongsTo(Course::class, 'lesson_id');
+        return $this->belongsTo(Course::class);
     }
 
     public function instructors()
@@ -22,6 +22,6 @@ class Lesson extends Model
 
     public function attendances()
     {
-        return $this->belongsTo(Attendance::class, 'lesson_id');
+        return $this->belongsTo(Attendance::class);
     }
 }

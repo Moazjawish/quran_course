@@ -14,9 +14,11 @@ return new class extends Migration
     {
         Schema::create('course_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(Course::class, 'course_id');
-            $table->file('file_path');
+            $table->unsignedBigInteger('course_id');
+            $table->string('file_path');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 

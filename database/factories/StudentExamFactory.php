@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Exam;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,11 @@ class StudentExamFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'student_id' => $this->faker->numberBetween(1, Student::count()),
+            'exam_id' => $this->faker->numberBetween(1, Exam::count()),
+            'student_mark' => $this->faker->numberBetween(20,100),
         ];
     }
 }
+
+

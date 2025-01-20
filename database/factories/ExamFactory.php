@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class ExamFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'course_id' => $this->faker->numberBetween(1, Course::count()),
+            'exam_date' => $this->faker->date(),
+            'max-mark'  => $this->faker->randomElement([100,200]),
         ];
     }
 }

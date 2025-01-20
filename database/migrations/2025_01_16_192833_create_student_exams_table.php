@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('student_exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(Student::class , 'student_id');
-            $table->foreignId(Exam::class , 'exam_id');
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('exam_id');
             $table->float('student_mark');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $table->timestamps();
+
         });
     }
 

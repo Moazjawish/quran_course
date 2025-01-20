@@ -12,22 +12,22 @@ class Course extends Model
 
     public function exams()
     {
-        return $this->belongsTo(Exam::class, 'course_id');
+        return $this->belongsTo(Exam::class);
     }
 
     public function courseFiles()
     {
-        return $this->belongsTo(CourseFile::class, 'course_id');
+        return $this->belongsTo(CourseFile::class);
     }
 
     public function students()
     {
-        return $this->belongsToMany(Student::class)->withTimestamps();
+        return $this->belongsToMany(Student::class, 'course_student');
     }
 
     public function instructors()
     {
-        return $this->belongsToMany(Instructor::class)->withTimestamps();
+        return $this->belongsToMany(Instructor::class, 'course_instrcutor');
     }
 
     public function lessons()

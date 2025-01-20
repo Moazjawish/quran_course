@@ -12,22 +12,22 @@ class Student extends Model
 
     public function tahfeezCourse()
     {
-        return $this->belongsTo(TahfeezCourse::class, 'student_id');
-    }    
+        return $this->belongsTo(TahfeezCourse::class);
+    }
 
     public function attendances()
     {
-        return $this->belongsTo(Attendance::class, 'student_id');
-    }    
+        return $this->belongsTo(Attendance::class);
+    }
     public function courses()
     {
-        return $this->belongsToMany(Course::class)->withTimestamps();
+        return $this->belongsToMany(Course::class, 'course_student');
     }
-    
+
     public function studentExams()
     {
-        return $this->belongsTo(StudentExam::class, 'student_id');
-    }   
+        return $this->belongsTo(StudentExam::class);
+    }
 
 
 }
