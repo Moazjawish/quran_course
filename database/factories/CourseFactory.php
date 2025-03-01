@@ -16,12 +16,13 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
-        $course_title =$this->faker->randomElement(['Jurisprudence', 'Biography', 'Tajweed' , 'tahfeez']);
+        // $course_title =$this->faker->randomElement(['Jurisprudence', 'Biography', 'Tajweed' , 'tahfeez']);
 
-        return [
-            'title' => $course_title,
-            'course_start_date' => $this->faker->date(),
-            'course_expire_date' => $this->faker->date(),
-        ];
+        // return [
+        //     'title' => $course_title,
+        //     'start_date' => $this->faker->date(),
+        //     'expire_date' => $this->faker->date(),
+        // ];
+        return [];
     }
 }

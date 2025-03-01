@@ -11,7 +11,7 @@ class StoreTahfeezCourseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class StoreTahfeezCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+                'studentId' => ['required'],
+                'instructorId' => ['required'],
+                'groupJoinDate' => ['required'],
         ];
     }
 }
+/*
+v=            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('instructor_id');
+            $table->dateTime("group_join_date")->nullable();
+
+*/

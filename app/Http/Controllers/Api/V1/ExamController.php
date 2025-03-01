@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Exam;
 use App\Http\Requests\StoreExamRequest;
 use App\Http\Requests\UpdateExamRequest;
+use App\Http\Resources\V1\ExamCollection;
+use App\Http\Resources\V1\ExamResource;
 
 class ExamController extends Controller
 {
@@ -13,7 +17,8 @@ class ExamController extends Controller
      */
     public function index()
     {
-        //
+        $exams = Exam::all();
+        return new ExamCollection($exams);
     }
 
     /**
@@ -29,7 +34,13 @@ class ExamController extends Controller
      */
     public function store(StoreExamRequest $request)
     {
-        //
+        $validated = $request->all();
+        Exam::create([
+            'course_id'=> $validated['courseId'],
+            'exam_date'=> $validated['examDate'],
+            'max_mark'=> $validated['maxMark'],
+            'passing_mark'=> $validated['passingMark'],
+        ]);
     }
 
     /**
@@ -37,7 +48,7 @@ class ExamController extends Controller
      */
     public function show(Exam $exam)
     {
-        //
+        return new ExamResource($exam);
     }
 
     /**
@@ -53,7 +64,13 @@ class ExamController extends Controller
      */
     public function update(UpdateExamRequest $request, Exam $exam)
     {
-        //
+        $validated = $request->all();
+        $exam->update([
+            'course_id'=> $validated['courseId'],
+            'exam_date'=> $validated['examDate'],
+            'max_mark'=> $validated['maxMark'],
+            'passing_mark'=> $validated['passingMark'],
+        ]);
     }
 
     /**
@@ -61,6 +78,6 @@ class ExamController extends Controller
      */
     public function destroy(Exam $exam)
     {
-        //
+        $exam->delete();
     }
 }

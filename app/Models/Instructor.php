@@ -9,6 +9,8 @@ class Instructor extends Model
 {
     /** @use HasFactory<\Database\Factories\InstructorFactory> */
     use HasFactory;
+
+    protected $guarded = [];
     public function tahfeezCourse()
     {
         return $this->belongsTo(TahfeezCourse::class);

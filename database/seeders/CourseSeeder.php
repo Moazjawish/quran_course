@@ -13,18 +13,18 @@ class CourseSeeder extends Seeder
     {
         Course::factory()->create([
             'title' => 'Jurisprudence',
-            'course_start_date'  => '2025-08-01 00:00:00',
-            'course_expire_date' => '2026-02-01 00:00:00',
+            'start_date'  => '2025-08-01',
+            'expected_end_date' => '2026-02-01',
         ]);
         Course::factory()->create([
             'title' => 'Biography',
-            'course_start_date'  => '2025-08-20 00:00:00',
-            'course_expire_date' => '2026-02-01 00:00:00',
+            'start_date'  => '2025-08-20',
+            'expected_end_date' => '2026-02-01',
         ]);
         Course::factory()->create([
             'title' => 'Tajweed',
-            'course_start_date'  => '2025-09-01 00:00:00',
-            'course_expire_date' => '2025-12-01 00:00:00',
+            'start_date'  => '2025-09-01',
+            'expected_end_date' => '2025-12-01',
         ]);
     }
 }

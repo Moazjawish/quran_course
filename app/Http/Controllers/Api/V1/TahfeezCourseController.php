@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use App\Models\TahfeezCourse;
 use App\Http\Requests\StoreTahfeezCourseRequest;
 use App\Http\Requests\UpdateTahfeezCourseRequest;
+use App\Http\Resources\V1\TahfeezCourseCollection;
+use App\Http\Resources\V1\TahfeezCourseResource;
 
 class TahfeezCourseController extends Controller
 {
@@ -13,7 +16,8 @@ class TahfeezCourseController extends Controller
      */
     public function index()
     {
-        //
+        $tahfeezCourses = TahfeezCourse::all();
+        return new TahfeezCourseCollection($tahfeezCourses);
     }
 
     /**
@@ -29,7 +33,12 @@ class TahfeezCourseController extends Controller
      */
     public function store(StoreTahfeezCourseRequest $request)
     {
-        //
+        $validated = $request->all();
+        TahfeezCourse::create([
+            'student_id' => $validated['studentId'],
+            'instructor_id' => $validated['instructorId'],
+            'group_join_date' => $validated['groupJoinDate'],
+        ]);
     }
 
     /**
@@ -37,10 +46,10 @@ class TahfeezCourseController extends Controller
      */
     public function show(TahfeezCourse $tahfeezCourse)
     {
-        //
+        return new TahfeezCourseResource($tahfeezCourse);
     }
 
-    /**
+    /*
      * Show the form for editing the specified resource.
      */
     public function edit(TahfeezCourse $tahfeezCourse)
@@ -53,7 +62,12 @@ class TahfeezCourseController extends Controller
      */
     public function update(UpdateTahfeezCourseRequest $request, TahfeezCourse $tahfeezCourse)
     {
-        //
+        $validated = $request->all();
+        $tahfeezCourse->update([
+            'student_id' => $validated['studentId'],
+            'instructor_id' => $validated['instructorId'],
+            'group_join_date' => $validated['groupJoinDate'],
+        ]);
     }
 
     /**
@@ -61,6 +75,6 @@ class TahfeezCourseController extends Controller
      */
     public function destroy(TahfeezCourse $tahfeezCourse)
     {
-        //
+        $tahfeezCourse->delete();
     }
 }

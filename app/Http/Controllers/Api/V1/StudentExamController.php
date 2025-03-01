@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use App\Models\StudentExam;
 use App\Http\Requests\StoreStudentExamRequest;
 use App\Http\Requests\UpdateStudentExamRequest;
+use App\Http\Resources\V1\StudentExamCollection;
+use App\Http\Resources\V1\StudentExamResource;
 
 class StudentExamController extends Controller
 {
@@ -13,7 +16,8 @@ class StudentExamController extends Controller
      */
     public function index()
     {
-        //
+        $studentExams = StudentExam::all();
+        return new StudentExamCollection($studentExams);
     }
 
     /**
@@ -29,7 +33,12 @@ class StudentExamController extends Controller
      */
     public function store(StoreStudentExamRequest $request)
     {
-        //
+        $validated = $request->all();
+        StudentExam::create([
+            'student_id' => $validated['studentId'],
+            'exam_id' => $validated['examId'],
+            'student_mark' => $validated['studentMark'],
+        ]);
     }
 
     /**
@@ -37,7 +46,7 @@ class StudentExamController extends Controller
      */
     public function show(StudentExam $studentExam)
     {
-        //
+        return new StudentExamResource($studentExam);
     }
 
     /**
@@ -53,7 +62,12 @@ class StudentExamController extends Controller
      */
     public function update(UpdateStudentExamRequest $request, StudentExam $studentExam)
     {
-        //
+        $validated = $request->all();
+        $studentExam->update([
+            'student_id' => $validated['studentId'],
+            'exam_id' => $validated['examId'],
+            'student_mark' => $validated['studentMark'],
+        ]);
     }
 
     /**
@@ -61,6 +75,6 @@ class StudentExamController extends Controller
      */
     public function destroy(StudentExam $studentExam)
     {
-        //
+        $studentExam->delete();
     }
 }

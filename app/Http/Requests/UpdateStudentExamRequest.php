@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateStudentExamRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateStudentExamRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,9 @@ class UpdateStudentExamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'studentId' => ['required'],
+            'examId' => ['required'],
+            'studentMark' => ['required'],
         ];
     }
 }

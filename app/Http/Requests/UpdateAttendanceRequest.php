@@ -11,7 +11,7 @@ class UpdateAttendanceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'lessonId' => ['required'],
+            'studentId' => ['required'],
+            'studentAttendance' => ['required'],
+            'studentAttendanceTime' => ['required'],
+            'recitationPerPage' => ['required'],
         ];
     }
 }

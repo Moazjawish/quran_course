@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Attendance;
 use App\Http\Requests\StoreAttendanceRequest;
 use App\Http\Requests\UpdateAttendanceRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\AttendanceCollection;
 
 class AttendanceController extends Controller
 {
@@ -13,7 +15,8 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        //
+        $attendance = Attendance::all();
+        return new AttendanceCollection($attendance);
     }
 
     /**
@@ -29,7 +32,14 @@ class AttendanceController extends Controller
      */
     public function store(StoreAttendanceRequest $request)
     {
-        //
+        $validated = $request->all();
+        Attendance::create([
+            'lesson_id' => $validated['lessonId'],
+            'student_id' => $validated['studentId'],
+            'student_attendance' => $validated['studentAttendance'],
+            'student_attendance_time' => $validated['studentAttendanceTime'],
+            'recitation_per_page' => $validated['recitationPerPage'],
+        ]);
     }
 
     /**
@@ -53,7 +63,14 @@ class AttendanceController extends Controller
      */
     public function update(UpdateAttendanceRequest $request, Attendance $attendance)
     {
-        //
+        $validated = $request->all();
+        $attendance->update([
+            'lesson_id' => $validated['lessonId'],
+            'student_id' => $validated['studentId'],
+            'student_attendance' => $validated['studentAttendance'],
+            'student_attendance_time' => $validated['studentAttendanceTime'],
+            'recitation_per_page' => $validated['recitationPerPage'],
+        ]);
     }
 
     /**
@@ -61,6 +78,6 @@ class AttendanceController extends Controller
      */
     public function destroy(Attendance $attendance)
     {
-        //
+        $attendance->delete();
     }
 }

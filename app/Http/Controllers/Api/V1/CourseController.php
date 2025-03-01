@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\Course;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
+use App\Http\Resources\V1\CourseCollection;
+use App\Http\Resources\V1\CourseResource;
 
 class CourseController extends Controller
 {
@@ -13,7 +17,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::all();
+        return new CourseCollection($courses);
     }
 
     /**
@@ -29,7 +34,12 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request)
     {
-        //
+        $validated = $request->all();
+        Course::create([
+            'title' => $validated['title'],
+            'start_date' => $validated['startDate'],
+            'expected_end_date' => $validated['expectedEndDate'],
+        ]);
     }
 
     /**
@@ -37,7 +47,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        return new CourseResource($course);
     }
 
     /**
@@ -53,7 +63,12 @@ class CourseController extends Controller
      */
     public function update(UpdateCourseRequest $request, Course $course)
     {
-        //
+        $validated = $request->all();
+        $course->update([
+            'title' => $validated['title'],
+            'start_date' => $validated['startDate'],
+            'expected_end_date' => $validated['expectedEndDate'],
+        ]);
     }
 
     /**
@@ -61,6 +76,6 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
     }
 }

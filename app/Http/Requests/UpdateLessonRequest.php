@@ -11,7 +11,7 @@ class UpdateLessonRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class UpdateLessonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'courseId' => ['required'],
+            'instructorId' => ['required'],
+            'lessonTitle' =>  ['required', 'min:3'],
+            'lessonDate' =>   ['required', 'min:3'],
+            'isTahfeezCourse' => ['required'],
         ];
     }
 }

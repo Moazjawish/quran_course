@@ -11,7 +11,7 @@ class StoreAttendanceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,20 @@ class StoreAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'lessonId' => ['required'],
+            'studentId' => ['required'],
+            'studentAttendance' => ['required'],
+            'studentAttendanceTime' => ['required'],
+            'recitationPerPage' => ['required'],
         ];
     }
 }
+/*
+            $table->unsignedBigInteger('');
+            $table->unsignedBigInteger('');
+            $table->boolean('');
+            $table->dateTime('')->nullable();
+            $table->float('')->nullable();
+
+
+*/

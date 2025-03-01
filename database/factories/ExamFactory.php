@@ -20,7 +20,8 @@ class ExamFactory extends Factory
         return [
             'course_id' => $this->faker->numberBetween(1, Course::count()),
             'exam_date' => $this->faker->date(),
-            'max-mark'  => $this->faker->randomElement([100,200]),
+            'max_mark'  => $this->faker->randomElement([100,200]),
+            'passing_mark'  => $this->faker->randomElement([100,200]),
         ];
     }
 }

@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\CourseFile;
 use App\Http\Requests\StoreCourseFileRequest;
 use App\Http\Requests\UpdateCourseFileRequest;
+use App\Http\Resources\V1\CourseFilesCollection;
+use App\Http\Resources\V1\CourseFilesResource;
 
 class CourseFileController extends Controller
 {
@@ -13,7 +17,8 @@ class CourseFileController extends Controller
      */
     public function index()
     {
-        //
+        $courseFiles = CourseFile::all();
+        return new CourseFilesCollection($courseFiles);
     }
 
     /**
@@ -29,7 +34,11 @@ class CourseFileController extends Controller
      */
     public function store(StoreCourseFileRequest $request)
     {
-        //
+        $validated = $request->all();
+        CourseFile::create([
+            'courseId' => $validated['course_id'],
+            'filePath' => $validated['file_path'],
+        ]);
     }
 
     /**
@@ -37,7 +46,7 @@ class CourseFileController extends Controller
      */
     public function show(CourseFile $courseFile)
     {
-        //
+        return new CourseFilesResource($courseFile);
     }
 
     /**
@@ -53,7 +62,11 @@ class CourseFileController extends Controller
      */
     public function update(UpdateCourseFileRequest $request, CourseFile $courseFile)
     {
-        //
+        $validated = $request->all();
+        $courseFile->update([
+            'courseId' => $validated['course_id'],
+            'filePath' => $validated['file_path'],
+        ]);
     }
 
     /**
@@ -61,6 +74,6 @@ class CourseFileController extends Controller
      */
     public function destroy(CourseFile $courseFile)
     {
-        //
+        $courseFile->delete();
     }
 }

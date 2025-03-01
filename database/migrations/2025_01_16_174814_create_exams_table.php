@@ -17,9 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id');
             $table->dateTime('exam_date');
             $table->float('max_mark');
+            $table->float('passing_mark');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
-
         });
     }
 
