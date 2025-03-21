@@ -23,18 +23,39 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required' , 'min:3'],
+            'name' => ['required', 'regex:/(^([a-zA-Z]+)(\d+)?$)/u','min:7',
+            Rule::unique('students')->ignore($this->id)],
             'email' => ['required' , 'email', Rule::unique('students')->ignore($this->id)],
-            'password' => ['required' , 'min:3'],
+            'password' => ['required' , 'min:3','confirmed'],
             'certificate' => ['required' , 'min:3'],
-            'studentImg' => ['required' , 'min:3'],
+            'studentImg' => ['required'],
             'birthDate' => ['required'],
-            'quranMemorizedParts' => ['required' , ],
-            'quranPassedParts' => ['required' , ],
-            'phoneNumber' => ['required' , ],
+            'quranMemorizedParts' => ['required'  ],
+            'quranPassedParts' => ['required'  ],
+            'phoneNumber' => ['required'  ],
             'address' => ['required' , 'min:3'],
             'enrollDate' => ['required'],
             'resetPasswordToken' => ['required' , 'min:3', 'nullable'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+
+            'name.unique' => 'the username is exist',
+            'name.regex' => 'invalid username ',
+            'email.unique' => 'the email is exist',
+            'password.min' => 'the password must be at least 5 characters',
+            'password.confirmed' => 'the password dismatch',
+            'certificate' => '',
+            'studentImg' => '',
+            'phoneNumber.regex' => 'invalid phone number',
+            'quranMemorizedParts' => '',
+            'quranPassedParts' => '',
+            'enrollDate' => '',
+            'address' => '',
+            'birthDate' => '',
         ];
     }
 }

@@ -22,8 +22,12 @@ class UpdateCourseFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'courseId' => ['required'],
-            'filePath' => ['required'],
+            'course_id' => ['required'],
+            'file_path' => ['required', 'file'],
         ];
+    }
+    public function messages()
+    {
+        return[''];
     }
 }

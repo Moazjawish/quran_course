@@ -30,12 +30,3 @@ class StoreAttendanceRequest extends FormRequest
         ];
     }
 }
-/*
-            $table->unsignedBigInteger('');
-            $table->unsignedBigInteger('');
-            $table->boolean('');
-            $table->dateTime('')->nullable();
-            $table->float('')->nullable();
-
-
-*/

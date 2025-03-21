@@ -27,10 +27,8 @@ class StoreTahfeezCourseRequest extends FormRequest
                 'groupJoinDate' => ['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }
-/*
-v=            $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('instructor_id');
-            $table->dateTime("group_join_date")->nullable();
-
-*/

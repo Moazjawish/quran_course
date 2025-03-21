@@ -28,4 +28,8 @@ class UpdateStudentExamRequest extends FormRequest
             'studentMark' => ['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }

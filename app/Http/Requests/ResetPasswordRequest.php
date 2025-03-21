@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCourseFileRequest extends FormRequest
+class ResetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,9 @@ class StoreCourseFileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id' => ['required'],
-            'file_path' => ['required', 'file'],
+            'email' => ['required', 'email'],
+            'token' => ['required'],
+            'password' => ['required', 'min:7', 'confirmed'],
         ];
     }
 }

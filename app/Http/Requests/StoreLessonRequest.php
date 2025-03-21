@@ -29,4 +29,9 @@ class StoreLessonRequest extends FormRequest
             'isTahfeezCourse' => ['requierd'],
         ];
     }
+
+    public function messages()
+    {
+        return[''];
+    }
 }

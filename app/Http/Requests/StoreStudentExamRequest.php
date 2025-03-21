@@ -27,4 +27,8 @@ class StoreStudentExamRequest extends FormRequest
             'studentMark' => ['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }

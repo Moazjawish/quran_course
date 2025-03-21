@@ -29,4 +29,8 @@ class UpdateLessonRequest extends FormRequest
             'isTahfeezCourse' => ['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }

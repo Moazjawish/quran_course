@@ -27,7 +27,8 @@ class InstructorResource extends JsonResource
             'religiousQualifications' => $this->religious_qualifications,
             'address' => $this->address,
             'birthDate' => $this->birth_date,
-            'isAdmin' => $this->is_admin,
+            // 'isAdmin' => $this->is_admin,
+            'role' => $this->role,
         ];
     }
 }

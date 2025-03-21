@@ -29,4 +29,8 @@ class UpdateAttendanceRequest extends FormRequest
             'recitationPerPage' => ['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }

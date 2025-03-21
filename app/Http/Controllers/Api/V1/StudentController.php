@@ -9,6 +9,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\V1\StudentCollection;
 use App\Http\Resources\V1\StudentResource;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -33,10 +34,14 @@ class StudentController extends Controller
     public function store(StoreStudentRequest $request)
     {
         $validated = $request->all();
-        Student::create([
+        if($request->file('studentImg'))
+        {
+            $validated['studentImg'] = handleFileUpload($request->file("studentImg"), 'store', 'studentsImg');
+        }
+        $student = Student::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $validated['password'],
+            'password' => Hash::make($validated['password']),
             'certificate' => $validated['certificate'],
             'student_img' => $validated['studentImg'],
             'birth_date' => $validated['birthDate'],
@@ -45,15 +50,23 @@ class StudentController extends Controller
             'phone_number' => $validated['phoneNumber'],
             'address' => $validated['address'],
             'enroll_date' => $validated['enrollDate'],
+            'role' => 'student',
             'reset_password_token' => $validated['resetPasswordToken'],
         ]);
+        $token = $student->createToken($validated['name']);
+        return [
+            'student' => $student,
+            'token' => $token->plainTextToken,
+        ];
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show($id)
     {
+        $student = Student::findOrFail($id);
         return new StudentResource($student);
     }
 
@@ -68,9 +81,14 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentRequest $request, Student $student)
+    public function update(UpdateStudentRequest $request, $id)
     {
         $validated = $request->all();
+        $student = Student::findOrFail($id);
+        if($request->file('studentImg'))
+        {
+            $validated['studentImg'] = handleFileUpload($request->file("studentImg"), 'update', 'studentsImg', $student->student_img);
+        }
         $student->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -83,8 +101,13 @@ class StudentController extends Controller
             'phone_number' => $validated['phoneNumber'],
             'address' => $validated['address'],
             'enroll_date' => $validated['enrollDate'],
+            'role' => 'student',
             'reset_password_token' => $validated['resetPasswordToken'],
         ]);
+        return [
+            'student' => $student,
+            'messsage' => "students updated",
+        ];
 
     }
 

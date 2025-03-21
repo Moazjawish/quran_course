@@ -9,6 +9,7 @@ use App\Http\Requests\StoreCourseFileRequest;
 use App\Http\Requests\UpdateCourseFileRequest;
 use App\Http\Resources\V1\CourseFilesCollection;
 use App\Http\Resources\V1\CourseFilesResource;
+use App\Models\Course;
 
 class CourseFileController extends Controller
 {
@@ -18,7 +19,11 @@ class CourseFileController extends Controller
     public function index()
     {
         $courseFiles = CourseFile::all();
-        return new CourseFilesCollection($courseFiles);
+        $courseFileCollection = new  CourseFilesCollection($courseFiles);
+        return  [
+            'courseFile' => $courseFileCollection,
+            'message' => 'All courses files '
+        ];
     }
 
     /**
@@ -34,11 +39,16 @@ class CourseFileController extends Controller
      */
     public function store(StoreCourseFileRequest $request)
     {
-        $validated = $request->all();
-        CourseFile::create([
-            'courseId' => $validated['course_id'],
-            'filePath' => $validated['file_path'],
-        ]);
+        $data = $request->validated();
+        if($request->file('file_path'))
+        {
+            $data['file_path'] = handleFileUpload($request->file('file_path'), 'store', 'courseFiles');
+        }
+        $data['course_id'] = $request->course_id;
+        CourseFile::create($data);
+        return [
+            'file_path' => $data['file_path'],
+            'message' => 'file uploaded'];
     }
 
     /**
@@ -60,13 +70,21 @@ class CourseFileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseFileRequest $request, CourseFile $courseFile)
+    public function update(UpdateCourseFileRequest $request, $id)
     {
-        $validated = $request->all();
-        $courseFile->update([
-            'courseId' => $validated['course_id'],
-            'filePath' => $validated['file_path'],
-        ]);
+        $data = $request->validated();
+        $courseFile = CourseFile::findOrFail($id);
+        if($request->file('file_path'))
+        {
+            $data['file_path'] = handleFileUpload($request->file('file_path'), 'update', 'courseFiles', $courseFile->file_path);
+        }
+        $data['course_id'] = $request->course_id;
+        dd($data);
+        $courseFile->update($data);
+        return [
+            'file_path' => $data['file_path'],
+            'message' => 'file updated',
+        ];
     }
 
     /**

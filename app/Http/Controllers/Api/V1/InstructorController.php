@@ -9,6 +9,7 @@ use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
 use App\Http\Resources\V1\InstructorCollection;
 use App\Http\Resources\V1\InstructorResource;
+use Illuminate\Support\Facades\Hash;
 
 class InstructorController extends Controller
 {
@@ -35,10 +36,14 @@ class InstructorController extends Controller
     public function store(StoreInstructorRequest $request)
     {
         $validated = $request->all();
-        Instructor::create([
+        if($request->file('instructorImg'))
+        {
+            $validated['instructorImg'] = handleFileUpload($request->file("instructorImg"), 'store', "instructorsImg");
+        }
+        $instructor = Instructor::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $validated['password'],
+            'password' => Hash::make($validated['password']),
             'certificate' => $validated['certificate'],
             'instructor_img' => $validated['instructorImg'],
             'phone_number' => $validated['phoneNumber'],
@@ -47,8 +52,14 @@ class InstructorController extends Controller
             'religious_qualifications' => $validated['religiousQualifications'],
             'address' => $validated['address'],
             'birth_date' => $validated['birthDate'],
-            'is_admin' => $validated['isAdmin'],
+            // 'is_admin' => $validated['isAdmin'],
+            'role' => 'instructor',
         ]);
+        $token = $instructor->createToken($validated['name']);
+        return [
+            'instructor' => $instructor,
+            'token' => $token->plainTextToken,
+        ];
     }
 
     /**
@@ -70,9 +81,14 @@ class InstructorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateInstructorRequest $request, Instructor $instructor)
+    public function update(UpdateInstructorRequest $request, $id)
     {
         $validated = $request->all();
+        $instructor = Instructor::findOrFail($id);
+        if($request->file('instructorImg'))
+        {
+            $validated['instructorImg'] = handleFileUpload($request->file("instructorImg"), 'update', "instructorsImg", $instructor->instructor_img);
+        }
         $instructor->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -85,8 +101,12 @@ class InstructorController extends Controller
             'religious_qualifications' => $validated['religiousQualifications'],
             'address' => $validated['address'],
             'birth_date' => $validated['birthDate'],
-            'is_admin' => $validated['isAdmin'],
+            // 'is_admin' => $validated['isAdmin'],
+            'role' => 'instructor',
         ]);
+        return [
+            'instructor' => $instructor,
+        ];
     }
 
     /**

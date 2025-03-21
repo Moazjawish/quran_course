@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('religious_qualifications')->nullable();
             $table->string('address');
             $table->date('birth_date');
+            $table->string('role');
             $table->boolean('is_admin')->default(false);
             $table->timestamps();
         });

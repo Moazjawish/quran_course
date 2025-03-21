@@ -28,4 +28,8 @@ class UpdateExamRequest extends FormRequest
             'passingMark'=>['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }

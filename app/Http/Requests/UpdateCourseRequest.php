@@ -27,4 +27,8 @@ class UpdateCourseRequest extends FormRequest
             'expectedEndDate' => ['required'],
         ];
     }
+    public function messages()
+    {
+        return[''];
+    }
 }

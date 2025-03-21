@@ -27,4 +27,10 @@ class UpdateTahfeezCourseRequest extends FormRequest
             'groupJoinDate' => ['required'],
     ];
     }
+    public function messages()
+    {
+        return[
+            ''
+        ];
+    }
 }

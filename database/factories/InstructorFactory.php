@@ -3,7 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use Alirezasedghi\LaravelImageFaker\ImageFaker;
+use Alirezasedghi\LaravelImageFaker\Services\Picsum;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Instructor>
  */
@@ -16,6 +17,8 @@ class InstructorFactory extends Factory
      */
     public function definition(): array
     {
+        $image_faker = new ImageFaker(new Picsum());
+
         $certificates = $this->faker->randomElement(['Software_Enginner', 'Doctor', 'Student']);
         $quran_parts  = $this->faker->randomElement([1, 2, 4, 8, 30]);
         $quran_passed_parts  = $this->faker->randomElement([1, 2, 4, 0, 10]);
@@ -26,14 +29,15 @@ class InstructorFactory extends Factory
             'email'=> $this->faker->email(),
             'password'=> $this->faker->password(),
             'certificate'=> $certificates,
-            'instructor_img'=> $this->faker->image(),
+            'instructor_img'=>$image_faker->image(storage_path('/app')),
             'phone_number'=> $this->faker->phoneNumber(),
             'quran_memorized_parts'=> $quran_parts,
             'quran_passed_parts'=> $quran_passed_parts,
             'religious_qualifications'=> $religious_qualifications,
             'address' => $this->faker->address(),
             'birth_date'=> $this->faker->date(),
-            'is_admin'=> false,
+            'role' =>  $this->faker->randomElement(['instructor', 'admin']),
+            // 'is_admin'=> false,
         ];
     }
 }

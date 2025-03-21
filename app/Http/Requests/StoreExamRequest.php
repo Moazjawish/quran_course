@@ -28,4 +28,9 @@ class StoreExamRequest extends FormRequest
             'passingMark'=>['required'],
         ];
     }
+
+    public function messages()
+    {
+        return[''];
+    }
 }

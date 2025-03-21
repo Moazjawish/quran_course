@@ -23,11 +23,11 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required' , 'min:3'],
-            'email' => ['required' , 'email',Rule::unique('students')],
-            'password' => ['required' , 'min:3'],
+            'name' => ['required', Rule::unique('students'), 'regex:/(^([a-zA-Z]+)(\d+)?$)/u','min:7'],
+            'email' => ['required' , 'email', Rule::unique('students'),],
+            'password' => ['required' , 'min:3','confirmed'],
             'certificate' => ['required' , 'min:3'],
-            'studentImg' => ['required' , 'min:3'],
+            'studentImg' => ['required', 'image'],
             'birthDate' => ['required'],
             'quranMemorizedParts' => ['required' , ],
             'quranPassedParts' => ['required' , ],
@@ -37,4 +37,25 @@ class StoreStudentRequest extends FormRequest
             'resetPasswordToken' => ['required' , 'min:3', 'nullable'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+
+            'name.unique' => 'the username is exist',
+            'name.regex' => 'invalid username ',
+            'email.unique' => 'the email is exist',
+            'password.min' => 'the password must be at least 5 characters',
+            'password.confirmed' => 'the password dismatch',
+            'certificate' => '',
+            'studentImg' => '',
+            'phoneNumber.regex' => 'invalid phone number',
+            'quranMemorizedParts' => '',
+            'quranPassedParts' => '',
+            'enrollDate' => '',
+            'address' => '',
+            'birthDate' => '',
+        ];
+    }
+
 }

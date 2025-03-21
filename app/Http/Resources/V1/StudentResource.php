@@ -27,6 +27,7 @@ class StudentResource extends JsonResource
             'phoneNumber' => $this->phone_number,
             'address' => $this->address,
             'enrollDate' => $this->enroll_date,
+            'role' => $this->role,
             'resetPasswordToken' => $this->reset_password_token,
         ];
     }

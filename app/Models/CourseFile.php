@@ -9,6 +9,7 @@ class CourseFile extends Model
 {
     /** @use HasFactory<\Database\Factories\CourseFileFactory> */
     use HasFactory;
+    protected $guarded = [];
     public function courses()
     {
         return $this->hasMany(Course::class);
