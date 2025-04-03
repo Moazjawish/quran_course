@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
-use App\Http\Resources\V1\StudentCollection;
-use App\Http\Resources\V1\StudentResource;
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
@@ -19,7 +19,9 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::all();
-        return  new StudentCollection($students);
+        return response()->json([
+            'stuedents' => $students
+        ]);
     }
     /**
      * Show the form for creating a new resource.
@@ -54,10 +56,10 @@ class StudentController extends Controller
             'reset_password_token' => $validated['resetPasswordToken'],
         ]);
         $token = $student->createToken($validated['name']);
-        return [
+        return response()->json([
             'student' => $student,
             'token' => $token->plainTextToken,
-        ];
+        ]);
 
     }
 
@@ -67,7 +69,16 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = Student::findOrFail($id);
-        return new StudentResource($student);
+        if(!$student)
+        {
+            return response()->json(['message' => 'student not found']);
+        }
+        else
+        {
+            return response()->json([
+                'student' => $student,
+            ]);
+        }
     }
 
     /**
@@ -104,18 +115,50 @@ class StudentController extends Controller
             'role' => 'student',
             'reset_password_token' => $validated['resetPasswordToken'],
         ]);
-        return [
+        return response()->json([
             'student' => $student,
             'messsage' => "students updated",
-        ];
-
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
-        $student->delete();
+        $student = Student::findOrFail($id);
+        if(!$student)
+        {
+            return response()->json(['message' => 'student not found']);
+        }
+        else
+        {
+            $student->delete();
+            return response()->json(['message' => 'student deleted successfully']);
+        }
     }
+
+    public function updateProfile(Request $request)
+    {
+        $student = $request->user();
+        $request->validate([
+            'name' => 'sometimes|required',
+            'email' => 'regex:/(^([a-zA-Z]+)(\d+)?$)/u|min:7|sometimes|required|email|unique:students,email,' . $student->id,
+        ]);
+        $student->update($request->only(['name', 'email']));
+
+        return response()->json([
+            'student' => $student,
+            'message' => "student updated successfully"
+        ]);
+    }
+
+    public function getProfile(Request $request)
+    {
+        $student = $request->user();
+        return response()->json([
+            'student' =>  $student,
+        ]);
+    }
+
 }

@@ -15,30 +15,52 @@ use App\Http\Controllers\Api\V1\{
     StudentExamController,
     TahfeezCourseController
 };
-use App\Http\Middleware\RoleMiddleware;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::group(['prefix'=>'v1'], function(){
+Route::group(['prefix' => 'v1',  'middleware' => 'auth:sanctum'], function(){
+
     // students
     Route::group(['prefix' => 'students'] ,function(){
         Route::get('', [StudentController::class, 'index']);
         Route::get('/{id}', [StudentController::class, 'show']);
+    });
+
+    Route::middleware(['role:admin'])->prefix('studetns')->group(function(){
         Route::post('store', [StudentController::class, 'store']);
-        Route::delete('delete', [StudentController::class, 'destroy']);
+        Route::delete('delete/{id}', [StudentController::class, 'destroy']);
         Route::post('update/{id}', [StudentController::class, 'update']);
     });
 
+    Route::middleware(['role:student'])->prefix('students')->group(function(){
+        Route::get('/profile', [StudentController::class, 'getProfile']);
+        Route::post('/updateProfile', [StudentController::class, 'updateProfile']);
+    });
+
+
+    //*********************************
+    //*********************************
     //instructors
-    Route::middleware(['auth:sanctum','role:instructor,admin'])->prefix('instructors')->group(function(){
+    Route::middleware(['restrict_student'])->prefix('instructors')->group(function(){
         Route::get('', [InstructorController::class, 'index']);
         Route::get('/{id}', [InstructorController::class, 'show']);
+    });
+
+    Route::middleware(['role:admin'])->prefix('instructors')->group(function(){
         Route::post('store', [InstructorController::class, 'store']);
-        Route::delete('delete', [InstructorController::class,'destroy']);
+        Route::delete('delete/{id}', [InstructorController::class,'destroy']);
         Route::post('update/{id}',[ InstructorController::class, 'update']);
     });
+
+    Route::middleware(['role:instructor'])->prefix('instructors')->group(function(){
+        Route::get('/profile', [InstructorController::class, 'getProfile']);
+        Route::post('/updateProfile', [InstructorController::class, 'updateProfile']);
+    });
+
+    // *********************************
+    // *********************************
 
     //lessons
     Route::group(['prefix' => 'lessons'] ,function(){
@@ -96,7 +118,9 @@ Route::group(['prefix'=>'v1'], function(){
         Route::post('update', [CourseFileController::class, 'update']);
         Route::delete('destory', [CourseFileController::class, 'destory']);
     });
+});
 
+Route::group(['prefix' => 'v1'], function(){
     // Authentication:
     Route::group(['prefix' => 'students'], function(){
         Route::post('/login'  , [StudentAuthController::class , 'login']);
@@ -108,26 +132,21 @@ Route::group(['prefix'=>'v1'], function(){
         Route::middleware('auth:sanctum')->post('/logout' , [InstructorAuthController::class , 'logout']);
     });
 
-    // Route::middleware(['auth:sanctum' ,'role:student'])->get('students/dashboard', function(){
-    //     return ['message' => 'student Dashboard'];
-    // });
-
-    // Route::middleware(['auth:sanctum' ,'role:instructor'])->get('instructors/dashboard', function(){
-    //     return ['message' => 'instructor Dashboard'];
-    // });
-
 // Forget and reset password:
-
 // Route::post('/resetPass/{id}', [InstructorAuthController::class, 'resetPassword']);
 // Route::get('/forgetPass', [InstructorAuthController::class, 'forgetPassword']);
-Route::post('/resetPass', [StudentAuthController::class, 'resetPassword']);
-Route::get('/forgetPassword', [StudentAuthController::class, 'forgetPassword']);
+// Route::post('/resetPass', [StudentAuthController::class, 'resetPassword']);
+// Route::get('/forgetPassword', [StudentAuthController::class, 'forgetPassword']);
 
 });
 
 /*
-student and instructor:
+student
     email: moaz@gmail.com
+    password: 111111
+
+instructor:
+    email: moazoo@gmail.com
     password: 111111
 
 admin:

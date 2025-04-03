@@ -7,8 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
-use App\Http\Resources\V1\InstructorCollection;
-use App\Http\Resources\V1\InstructorResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class InstructorController extends Controller
@@ -19,7 +18,9 @@ class InstructorController extends Controller
     public function index()
     {
         $instructors = Instructor::all();
-        return new InstructorCollection($instructors);
+        return response()->json([
+            'instructors' => $instructors,
+        ]);
     }
 
     /**
@@ -52,22 +53,30 @@ class InstructorController extends Controller
             'religious_qualifications' => $validated['religiousQualifications'],
             'address' => $validated['address'],
             'birth_date' => $validated['birthDate'],
-            // 'is_admin' => $validated['isAdmin'],
             'role' => 'instructor',
         ]);
         $token = $instructor->createToken($validated['name']);
-        return [
+        return response()->json([
             'instructor' => $instructor,
-            'token' => $token->plainTextToken,
-        ];
+            'token' => $token->plainTextToken
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Instructor $instructor)
+    public function show($id)
     {
-        return new InstructorResource($instructor);
+        $instructor = Instructor::findOrFail($id);
+        if(!$instructor)
+        {
+            return response()->json([
+                'message' => "instructor not found",
+            ]);
+        }
+        return response()->json([
+            'instructor' => $instructor
+        ]);
     }
 
     /**
@@ -101,19 +110,41 @@ class InstructorController extends Controller
             'religious_qualifications' => $validated['religiousQualifications'],
             'address' => $validated['address'],
             'birth_date' => $validated['birthDate'],
-            // 'is_admin' => $validated['isAdmin'],
             'role' => 'instructor',
         ]);
-        return [
-            'instructor' => $instructor,
-        ];
+        return response()->json(['instructor' => $instructor,
+        'message' => 'instructor updated successfuly',
+        ]);
     }
 
+    public function getProfile(Request $request)
+    {
+        $instructor = $request->user();
+        return response()->json([
+            'instructor' =>  $instructor,
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $instructor = $request->user();
+        $request->validate([
+            'name' => 'sometimes|required',
+            'email' => 'regex:/(^([a-zA-Z]+)(\d+)?$)/u|min:7|sometimes|required|email|unique:instructors,email,' . $instructor->id,
+        ]);
+        $instructor->update($request->only(['name', 'email']));
+        return response()->json(['message' => 'Profile updated successfully', 'instructor' => $instructor]);
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Instructor $instructor)
+    public function destroy($id)
     {
+        $instructor = Instructor::find($id);
+        if (!$instructor) {
+            return response()->json(['message' => 'Instructor not found'], 404);
+        }
         $instructor->delete();
+        return response()->json(['message' => 'Instructor deleted successfully']);
     }
 }
