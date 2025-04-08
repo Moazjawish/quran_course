@@ -132,11 +132,12 @@ Route::group(['prefix' => 'v1'], function(){
         Route::middleware('auth:sanctum')->post('/logout' , [InstructorAuthController::class , 'logout']);
     });
 
-// Forget and reset password:
-// Route::post('/resetPass/{id}', [InstructorAuthController::class, 'resetPassword']);
-// Route::get('/forgetPass', [InstructorAuthController::class, 'forgetPassword']);
-// Route::post('/resetPass', [StudentAuthController::class, 'resetPassword']);
-// Route::get('/forgetPassword', [StudentAuthController::class, 'forgetPassword']);
+Route::post('/email/verify/{id}/{hash}', [StudentAuthController::class, 'emailVerify']);
+Route::post('/resend-email-verify', [StudentAuthController::class, 'resendEmailVerificationMail'])->middleware('auth:sanctum');
+
+Route::post('/forgot-password', [StudentAuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [StudentAuthController::class, 'resetPassword']);
+
 
 });
 

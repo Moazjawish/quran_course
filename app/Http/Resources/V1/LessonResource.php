@@ -18,7 +18,8 @@ class LessonResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'RelatedCourses' => Course::find($this->course_id),
+            // 'RelatedCourses' => Course::find($this->course_id),
+            'RelatedCourses' => CourseResource::collection($this->whenLoaded('courses')),
             'RelatedInstructors' => Instructor::find($this->instructor_id),
             'lessonTitle' => $this->lesson_title,
             'lessonDate' => $this->lesson_date,

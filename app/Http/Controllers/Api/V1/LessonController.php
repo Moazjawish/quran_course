@@ -18,7 +18,8 @@ class LessonController extends Controller
      */
     public function index(Request $request)
     {
-        $lessons = Lesson::all();
+        // $lessons = Lesson::all();
+        $lessons = Lesson::with('courses');
         return new LessonCollection($lessons);
     }
 

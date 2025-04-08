@@ -17,31 +17,37 @@ class ResetPasswordJob extends Mailable
     /**
      * Create a new message instance.
      */
-    public $data;
-    public function __construct($data)
+    public $url;
+    public function __construct($url)
     {
-        $this->data = $data;
+        $this->url = $url;
     }
 
     /**
      * Get the message envelope.
      */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Moaz Reset Password Job',
-        );
-    }
+    // public function envelope(): Envelope
+    // {
+    //     return new Envelope(
+    //         // subject: 'Moaz Reset Password Job',
+    //     );
+    // }
 
+    public function build()
+    {
+        return $this->subject('Reset your password')
+                    ->markdown('emails.reset-password');
+                    // resources/views/emails/reset-password.blade.php
+    }
     /**
      * Get the message content definition.
      */
-    public function content(): Content
-    {
-        return new Content(
-            view: '/resources/emails/verify_email.php'
-        );
-    }
+    // public function content(): Content
+    // {
+    //     return new Content(
+    //         // view: '/resources/emails/verify_email.php'
+    //     );
+    // }
 
     /**
      * Get the attachments for the message.
