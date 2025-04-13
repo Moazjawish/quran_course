@@ -12,10 +12,6 @@ class Instructor extends Model
     use HasApiTokens, HasFactory;
 
     protected $guarded = [];
-    public function tahfeezCourse()
-    {
-        return $this->belongsTo(TahfeezCourse::class);
-    }
 
     public function lessons()
     {

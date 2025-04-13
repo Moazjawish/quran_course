@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     echo("Welcome page.");
 });
+
+Route::get('/reset-password/{token}', function ($token) {
+    return response()->json(['token' => $token]);
+})->name('password.reset');

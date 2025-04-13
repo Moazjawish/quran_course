@@ -2,24 +2,19 @@
 
 namespace App\Models;
 
- use Illuminate\Contracts\Auth\CanResetPassword;
- use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\PasswordResetLinkNotificationation;
+use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Student extends  Authenticatable implements MustVerifyEmail, CanResetPassword {
+class Student extends  Authenticatable implements CanResetPassword {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, PasswordsCanResetPassword;
 
-    protected $guarded = [];
-
-    public function tahfeezCourse()
-    {
-        return $this->belongsTo(TahfeezCourse::class);
-    }
+    protected $fillable = ['name', 'password'];
 
     public function attendances()
     {
@@ -48,4 +43,9 @@ protected function casts(): array
         ];
     }
 
+
+public function sendPasswordResetNotification($token)
+{
+    $this->notify(new PasswordResetLinkNotificationation($token));
+}
 }

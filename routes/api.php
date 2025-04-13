@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\{
@@ -40,8 +39,6 @@ Route::group(['prefix' => 'v1',  'middleware' => 'auth:sanctum'], function(){
     });
 
 
-    //*********************************
-    //*********************************
     //instructors
     Route::middleware(['restrict_student'])->prefix('instructors')->group(function(){
         Route::get('', [InstructorController::class, 'index']);
@@ -58,9 +55,6 @@ Route::group(['prefix' => 'v1',  'middleware' => 'auth:sanctum'], function(){
         Route::get('/profile', [InstructorController::class, 'getProfile']);
         Route::post('/updateProfile', [InstructorController::class, 'updateProfile']);
     });
-
-    // *********************************
-    // *********************************
 
     //lessons
     Route::group(['prefix' => 'lessons'] ,function(){
@@ -94,14 +88,7 @@ Route::group(['prefix' => 'v1',  'middleware' => 'auth:sanctum'], function(){
         Route::post('update', [AttendanceController::class, 'update']);
         Route::delete('destroy', [AttendanceController::class, 'destroy']);
     });
-    //tahfeez
-    Route::group(['prefix' => 'tahfeez'], function(){
-        Route::get('', [TahfeezCourseController::class, 'index']);
-        Route::get('/{id}', [TahfeezCourseController::class, 'show']);
-        Route::post('store',[ TahfeezCourseController::class , 'store']);
-        Route::post('update',[ TahfeezCourseController::class , 'update']);
-        Route::delete('destroy',[ TahfeezCourseController::class , 'destroy']);
-    });
+
     //student_exam
     Route::group(['prefix' => 'stdExam'], function(){
         Route::get('', [StudentExamController::class, 'index']);
@@ -132,12 +119,9 @@ Route::group(['prefix' => 'v1'], function(){
         Route::middleware('auth:sanctum')->post('/logout' , [InstructorAuthController::class , 'logout']);
     });
 
-Route::post('/email/verify/{id}/{hash}', [StudentAuthController::class, 'emailVerify']);
-Route::post('/resend-email-verify', [StudentAuthController::class, 'resendEmailVerificationMail'])->middleware('auth:sanctum');
 
-Route::post('/forgot-password', [StudentAuthController::class, 'forgotPassword']);
-Route::post('/reset-password', [StudentAuthController::class, 'resetPassword']);
-
+Route::post('/forgot-password', [StudentAuthController::class, 'sendResetLinkEmail']);
+Route::post('/reset-password', [StudentAuthController::class, 'reset']);
 
 });
 
