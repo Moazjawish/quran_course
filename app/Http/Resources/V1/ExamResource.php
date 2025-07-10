@@ -18,6 +18,7 @@ class ExamResource extends JsonResource
         return [
             'id' => $this->id,
             'relatedCourse' => Course::find($this->course_id),
+            "title" => $this->title,
             'examDate' => $this->exam_date,
             'maxMark' => $this->max_mark,
             'passingMark' => $this->passing_mark,

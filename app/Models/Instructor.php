@@ -1,26 +1,32 @@
 <?php
 
 namespace App\Models;
-
+use App\Notifications\InstructorPasswordNotification;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Instructor extends Model
+class Instructor extends Model implements CanResetPasswordContract
 {
-    /** @use HasFactory<\Database\Factories\InstructorFactory> */
-    use HasApiTokens, HasFactory;
-
+    use HasApiTokens, HasFactory, CanResetPasswordTrait, Notifiable;
     protected $guarded = [];
 
     public function lessons()
     {
-        return $this->belongsTo(Lesson::class);
+        return $this->hasMany(Lesson::class);
     }
 
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'course_instrcutor');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
     }
 
         /**
@@ -35,6 +41,9 @@ class Instructor extends Model
         ];
     }
 
-
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new InstructorPasswordNotification($token));
+    }
 
 }

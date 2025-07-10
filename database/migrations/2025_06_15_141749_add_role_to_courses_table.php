@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->string('type')->after('expected_end_date');
+            $table->string('description')->after('title');
+            $table->string('duration')->after('description');
+            $table->string('level')->after('duration');
+            $table->string('image')->after('level');
         });
     }
 
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn('type');
+            //
         });
     }
 };

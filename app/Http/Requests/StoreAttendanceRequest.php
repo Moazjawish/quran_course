@@ -22,11 +22,10 @@ class StoreAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lessonId' => ['required'],
-            'studentId' => ['required'],
-            'studentAttendance' => ['required'],
-            'studentAttendanceTime' => ['required'],
-            'recitationPerPage' => ['required'],
+            'lesson_id' => ['required','exists:lessons,id'],
+            'student_id' => ['required','exists:students,id'],
+            'student_attendance' => ['required'],
+            'student_attendance_time' => ['required'],
         ];
     }
 }

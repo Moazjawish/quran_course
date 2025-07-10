@@ -22,10 +22,11 @@ class UpdateExamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'courseId'=>['required'],
-            'examDate'=>['required'],
-            'maxMark'=>['required'],
-            'passingMark'=>['required'],
+            'course_id'=>['required'],
+            'title' => ['required'],
+            'exam_date'=>['required' ,'date' ,'date_format:Y-m-d',],
+            'max_mark'=>['required'],
+            'passing_mark'=>['required'],
         ];
     }
     public function messages()

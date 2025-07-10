@@ -9,13 +9,19 @@ class Attendance extends Model
 {
     /** @use HasFactory<\Database\Factories\AttendanceFactory> */
     use HasFactory;
-    public function students()
-    {
-        return $this->hasMany(Student::class);
-    }
-
+    protected $guarded = [];
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->belongsTo(Lesson::class, 'lesson_id');
+    }
+
+    public function students()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function instructors()
+    {
+        return $this->belongsTo(Instructor::class, 'instructor_id');
     }
 }

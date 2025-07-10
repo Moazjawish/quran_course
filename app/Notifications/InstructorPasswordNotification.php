@@ -3,18 +3,19 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PasswordResetLinkNotificationation extends Notification
+class InstructorPasswordNotification extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-
-    public function __construct(public string $token)
+    public $token;
+    public function __construct($token)
     {
         $this->token = $token;
     }
@@ -32,16 +33,16 @@ class PasswordResetLinkNotificationation extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
-        $url = "http://localhost:3000/reset-password?token={$this->token}&email={$notifiable->email}";
-
+        $resetUrl = url("/reset-password?token={$this->token}&email={$notifiable->email}");
         return (new MailMessage)
-            ->subject('Reset Password')
+            ->subject('Reset Your Password')
             ->line('Click the button below to reset your password.')
-            ->action('Reset Password', $url)
-            ->line('If you didn’t request a password reset, no further action is required.');
+            ->action('Reset Password', $resetUrl)
+            ->line('This link will expire in 60 minutes.');
     }
+
     /**
      * Get the array representation of the notification.
      *

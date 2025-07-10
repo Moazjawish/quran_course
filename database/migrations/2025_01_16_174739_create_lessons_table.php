@@ -14,12 +14,9 @@ return new class extends Migration
     {
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('instructor_id');
             $table->string('lesson_title');
             $table->date('lesson_date');
-            $table->boolean('is_tahfeez_course')->default(false);
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
             $table->timestamps();
 

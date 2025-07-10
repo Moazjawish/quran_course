@@ -5,6 +5,7 @@ use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Middleware\HandleCors;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,6 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'restrict_student' => RestrictStudentAccess::class,
+        ]);
+        $middleware->append([
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
+        $middleware->api([
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

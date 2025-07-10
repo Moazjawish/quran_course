@@ -7,9 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CourseFile;
 use App\Http\Requests\StoreCourseFileRequest;
 use App\Http\Requests\UpdateCourseFileRequest;
-use App\Http\Resources\V1\CourseFilesCollection;
 use App\Http\Resources\V1\CourseFilesResource;
-use App\Models\Course;
 
 class CourseFileController extends Controller
 {
@@ -19,11 +17,9 @@ class CourseFileController extends Controller
     public function index()
     {
         $courseFiles = CourseFile::all();
-        $courseFileCollection = new  CourseFilesCollection($courseFiles);
-        return  [
-            'courseFile' => $courseFileCollection,
-            'message' => 'All courses files '
-        ];
+        return response()->json([
+            'coursesFiles' => CourseFilesResource::collection($courseFiles),
+        ]);
     }
 
     /**
@@ -45,21 +41,31 @@ class CourseFileController extends Controller
             $data['file_path'] = handleFileUpload($request->file('file_path'), 'store', 'courseFiles');
         }
         $data['course_id'] = $request->course_id;
-        CourseFile::create($data);
-        return [
-            'file_path' => $data['file_path'],
-            'message' => 'file uploaded'];
+        $courseFile = CourseFile::create($data);
+        return response()->json([
+            'courseFile' => $courseFile,
+            'message' => 'file uploaded'
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CourseFile $courseFile)
+    public function show($id)
     {
-        return new CourseFilesResource($courseFile);
+        $courseFile = CourseFile::findOrFail($id);
+        if(!$courseFile)
+        {
+            return response()->json([
+                'message' => "File not found"
+            ]);
+        }
+            return response()->json([
+                'coursesFiles' =>new CourseFilesResource($courseFile),
+            ]);
     }
 
-    /**
+    /*
      * Show the form for editing the specified resource.
      */
     public function edit(CourseFile $courseFile)
@@ -79,19 +85,29 @@ class CourseFileController extends Controller
             $data['file_path'] = handleFileUpload($request->file('file_path'), 'update', 'courseFiles', $courseFile->file_path);
         }
         $data['course_id'] = $request->course_id;
-        dd($data);
+        $data['file_name'] = $request->file_name;
         $courseFile->update($data);
-        return [
-            'file_path' => $data['file_path'],
+        return response()->json([
+            'courseFile' => $courseFile,
             'message' => 'file updated',
-        ];
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CourseFile $courseFile)
+    public function destroy($id)
     {
-        $courseFile->delete();
+        $courseFile = CourseFile::findOrFail($id);
+        if(!$courseFile)
+        {
+            return response()->json([
+                'message' => "File not found"
+            ]);
+        }
+            $courseFile->delete();
+            return response()->json([
+                'message' => "file is deleted succssfully"
+            ]);
     }
 }

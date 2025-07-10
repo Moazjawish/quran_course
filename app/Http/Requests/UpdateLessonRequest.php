@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateLessonRequest extends FormRequest
 {
@@ -22,11 +24,10 @@ class UpdateLessonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'courseId' => ['required'],
-            'instructorId' => ['required'],
-            'lessonTitle' =>  ['required', 'min:3'],
-            'lessonDate' =>   ['required', 'min:3'],
-            'isTahfeezCourse' => ['required'],
+            'course_id' => ['required','exists:courses,id'],
+            'instructor_id' => ['required','exists:instructors,id'],
+            'lesson_title' => ['required', 'min:3', Rule::unique('lessons')],
+            'lesson_date' =>  ['required','date' ,'date_format:Y-m-d','after:'. Carbon::now()],
         ];
     }
     public function messages()

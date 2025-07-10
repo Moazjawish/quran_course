@@ -7,6 +7,7 @@ use App\Http\Requests\InstructorAuthRequest;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class InstructorAuthController extends Controller
@@ -32,7 +33,43 @@ class InstructorAuthController extends Controller
     {
         $request->user()->tokens()->delete();
         return[
-            'message' => 'instructor Logged out successfully',
+            'message' => $request->user()->name .' instructor Logged out successfully',
         ];
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::broker('instructors')->sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'Password reset link sent.'])
+            : response()->json(['message' => 'Unable to send reset link.'], 400);
+    }
+
+    // user click the link that send in email
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'token' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $status = Password::broker('instructors')->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+            ? response()->json(['message' => 'Password has been reset.'])
+            : response()->json(['message' => 'Failed to reset password.'], 400);
     }
 }

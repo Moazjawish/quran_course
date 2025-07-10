@@ -27,14 +27,14 @@ class StoreStudentRequest extends FormRequest
             'email' => ['required' , 'email', Rule::unique('students'),],
             'password' => ['required' , 'min:3','confirmed'],
             'certificate' => ['required' , 'min:3'],
-            'studentImg' => ['required', 'image'],
-            'birthDate' => ['required'],
-            'quranMemorizedParts' => ['required' , ],
-            'quranPassedParts' => ['required' , ],
-            'phoneNumber' => ['required' , ],
+            'student_img' => ['required', 'image'],
+            'birth_date' => ['required'],
+            'quran_memorized_parts' => ['required' , ],
+            'quran_passed_parts' => ['required' , ],
+            'phone_number' => ['required' , ],
             'address' => ['required' , 'min:3'],
-            'enrollDate' => ['required'],
-            'resetPasswordToken' => ['required' , 'min:3', 'nullable'],
+            'enroll_date' => ['required'],
+            'reset_password_token' => ['nullable' , 'min:3', 'nullable'],
         ];
     }
 
@@ -47,14 +47,7 @@ class StoreStudentRequest extends FormRequest
             'email.unique' => 'the email is exist',
             'password.min' => 'the password must be at least 5 characters',
             'password.confirmed' => 'the password dismatch',
-            'certificate' => '',
-            'studentImg' => '',
             'phoneNumber.regex' => 'invalid phone number',
-            'quranMemorizedParts' => '',
-            'quranPassedParts' => '',
-            'enrollDate' => '',
-            'address' => '',
-            'birthDate' => '',
         ];
     }
 

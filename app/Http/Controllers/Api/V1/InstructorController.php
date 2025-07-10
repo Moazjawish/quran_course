@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instructor;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
+use App\Http\Resources\V1\InstructorResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,11 +20,11 @@ class InstructorController extends Controller
     {
         $instructors = Instructor::all();
         return response()->json([
-            'instructors' => $instructors,
+            'instructors' => InstructorResource::collection($instructors),
         ]);
     }
 
-    /**
+    /*
      * Show the form for creating a new resource.
      */
     public function create()
@@ -31,33 +32,33 @@ class InstructorController extends Controller
         //
     }
 
-    /**
+    /*
      * Store a newly created resource in storage.
      */
     public function store(StoreInstructorRequest $request)
     {
         $validated = $request->all();
-        if($request->file('instructorImg'))
+        if($request->file('instructor_img'))
         {
-            $validated['instructorImg'] = handleFileUpload($request->file("instructorImg"), 'store', "instructorsImg");
+            $validated['instructor_img'] = handleFileUpload($request->file("instructor_img"), 'store', "instructorsImg");
         }
         $instructor = Instructor::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'certificate' => $validated['certificate'],
-            'instructor_img' => $validated['instructorImg'],
-            'phone_number' => $validated['phoneNumber'],
-            'quran_memorized_parts' => $validated['quranMemorizedParts'],
-            'quran_passed_parts' => $validated['quranPassedParts'],
-            'religious_qualifications' => $validated['religiousQualifications'],
+            'instructor_img' => $validated['instructor_img'],
+            'phone_number' => $validated['phone_number'],
+            'quran_memorized_parts' => $validated['quran_memorized_parts'],
+            'quran_passed_parts' => $validated['quran_passed_parts'],
+            'religious_qualifications' => $validated['religious_qualifications'],
             'address' => $validated['address'],
-            'birth_date' => $validated['birthDate'],
+            'birth_date' => $validated['birth_date'],
             'role' => 'instructor',
         ]);
         $token = $instructor->createToken($validated['name']);
         return response()->json([
-            'instructor' => $instructor,
+            'instructor' => new InstructorResource($instructor),
             'token' => $token->plainTextToken
         ]);
     }
@@ -75,7 +76,7 @@ class InstructorController extends Controller
             ]);
         }
         return response()->json([
-            'instructor' => $instructor
+            'instructor' => new InstructorResource($instructor),
         ]);
     }
 
@@ -94,25 +95,26 @@ class InstructorController extends Controller
     {
         $validated = $request->all();
         $instructor = Instructor::findOrFail($id);
-        if($request->file('instructorImg'))
+        if($request->file('instructor_img'))
         {
-            $validated['instructorImg'] = handleFileUpload($request->file("instructorImg"), 'update', "instructorsImg", $instructor->instructor_img);
+            $validated['instructor_img'] = handleFileUpload($request->file("instructor_img"), 'update', "instructorsImg", $instructor->instructor_img);
         }
         $instructor->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'],
             'certificate' => $validated['certificate'],
-            'instructor_img' => $validated['instructorImg'],
-            'phone_number' => $validated['phoneNumber'],
-            'quran_memorized_parts' => $validated['quranMemorizedParts'],
-            'quran_passed_parts' => $validated['quranPassedParts'],
-            'religious_qualifications' => $validated['religiousQualifications'],
+            'instructor_img' => $validated['instructor_img'],
+            'phone_number' => $validated['phone_number'],
+            'quran_memorized_parts' => $validated['quran_memorized_parts'],
+            'quran_passed_parts' => $validated['quran_passed_parts'],
+            'religious_qualifications' => $validated['religious_qualifications'],
             'address' => $validated['address'],
-            'birth_date' => $validated['birthDate'],
+            'birth_date' => $validated['birth_date'],
             'role' => 'instructor',
         ]);
-        return response()->json(['instructor' => $instructor,
+        return response()->json([
+        'instructor' => new InstructorResource($instructor),
         'message' => 'instructor updated successfuly',
         ]);
     }
@@ -121,7 +123,7 @@ class InstructorController extends Controller
     {
         $instructor = $request->user();
         return response()->json([
-            'instructor' =>  $instructor,
+            'instructor' => new InstructorResource($instructor),
         ]);
     }
 
@@ -133,7 +135,10 @@ class InstructorController extends Controller
             'email' => 'regex:/(^([a-zA-Z]+)(\d+)?$)/u|min:7|sometimes|required|email|unique:instructors,email,' . $instructor->id,
         ]);
         $instructor->update($request->only(['name', 'email']));
-        return response()->json(['message' => 'Profile updated successfully', 'instructor' => $instructor]);
+        return response()->json(['message' => 'Profile updated successfully',
+        'instructor' => new InstructorResource($instructor),
+
+    ]);
     }
     /**
      * Remove the specified resource from storage.

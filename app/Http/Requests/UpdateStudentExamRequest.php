@@ -23,9 +23,9 @@ class UpdateStudentExamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'studentId' => ['required'],
-            'examId' => ['required'],
-            'studentMark' => ['required'],
+            'student_id' => ['required'],
+            'exam_id' => ['required'],
+            'student_mark' => ['required'],
         ];
     }
     public function messages()

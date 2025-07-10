@@ -13,17 +13,17 @@ class Course extends Model
     protected $guarded = [];
     public function exams()
     {
-        return $this->belongsTo(Exam::class);
+        return $this->belongsTo(Exam::class, 'exam_id');
     }
 
     public function courseFiles()
     {
-        return $this->belongsTo(CourseFile::class);
+        return $this->hasMany(CourseFile::class);
     }
 
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'course_student');
+        return $this->belongsToMany(Student::class, 'course_student','course_id','student_id');
     }
 
     public function instructors()
@@ -33,6 +33,6 @@ class Course extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->belongsToMany(Lesson::class);
     }
 }

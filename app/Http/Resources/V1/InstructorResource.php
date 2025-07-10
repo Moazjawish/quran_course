@@ -14,21 +14,23 @@ class InstructorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $data = getInstructorRelations($this->email);
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,
             'certificate' => $this->certificate,
-            'instructorImg' => $this->instructor_img,
-            'phoneNumber' => $this->phone_number,
-            'quranMemorizedParts' => $this->quran_memorized_parts,
-            'quranPassedParts' => $this->quran_passed_parts,
-            'religiousQualifications' => $this->religious_qualifications,
+            'instructor_img' => $this->instructor_img,
+            'phone_number' => $this->phone_number,
+            'quran_memorized_parts' => $this->quran_memorized_parts,
+            'quran_passed_parts' => $this->quran_passed_parts,
+            'religious_qualifications' => $this->religious_qualifications,
             'address' => $this->address,
-            'birthDate' => $this->birth_date,
-            // 'isAdmin' => $this->is_admin,
+            'birth_date' => $this->birth_date,
             'role' => $this->role,
+            'relatedCourses' => $data->courses,
+            'relatedLessons' => $data->lessons,
         ];
     }
 }

@@ -13,16 +13,20 @@ class Lesson extends Model
 
     public function courses()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsToMany(Course::class, 'course_lesson');
     }
 
     public function instructors()
     {
-        return $this->hasMany(Instructor::class);
+        return $this->belongsTo(Instructor::class, 'instructor_id');
     }
 
     public function attendances()
     {
-        return $this->belongsTo(Attendance::class);
+        return $this->belongsTo(Attendance::class, 'attendance_id');
+    }
+    public function studentRecitation()
+    {
+        return $this->belongsTo(StudentRecitation::class, 'lesson_id');
     }
 }

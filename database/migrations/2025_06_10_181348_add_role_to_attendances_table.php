@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('course_files', function (Blueprint $table) {
-            $table->string('file_name')->after('course_id');
+        Schema::table('attendances', function (Blueprint $table) {
+            $table->dropForeign('attendances_instructor_id_foreign');
+            $table->dropColumn('instructor_id');
         });
     }
 
@@ -21,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('course_files', function (Blueprint $table) {
-            $table->dropColumn('file_name');
+        Schema::table('attendances', function (Blueprint $table) {
+            //
         });
     }
 };

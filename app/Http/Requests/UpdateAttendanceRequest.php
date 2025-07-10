@@ -22,11 +22,13 @@ class UpdateAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lessonId' => ['required'],
-            'studentId' => ['required'],
-            'studentAttendance' => ['required'],
-            'studentAttendanceTime' => ['required'],
-            'recitationPerPage' => ['required'],
+            'lesson_id' => ['required','exists:lessons,id'],
+            'student_id' => ['required','exists:students,id'],
+            // 'instructor_id' => ['required','exists:instructors,id'],
+            'student_attendance' => ['required'],
+            // 'instructor_attendance' => ['required'],
+            'student_attendance_time' => ['required'],
+            // 'instructor_attendance_time' => ['required'],
         ];
     }
     public function messages()

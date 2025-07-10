@@ -23,7 +23,8 @@ class StoreCourseFileRequest extends FormRequest
     {
         return [
             'course_id' => ['required'],
-            'file_path' => ['required', 'file'],
+            'file_name' => ['required'],
+            'file_path' => ['required', 'file']
         ];
     }
 }

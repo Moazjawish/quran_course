@@ -23,6 +23,7 @@ class UpdateCourseFileRequest extends FormRequest
     {
         return [
             'course_id' => ['required'],
+            'file_name' => ['required'],
             'file_path' => ['required', 'file'],
         ];
     }

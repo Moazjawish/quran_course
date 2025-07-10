@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
-use Illuminate\Http\Client\Request as ClientRequest;
+use App\Http\Resources\V1\StudentResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,44 +20,41 @@ class StudentController extends Controller
     {
         $students = Student::all();
         return response()->json([
-            'stuedents' => $students
+            'students' => StudentResource::collection($students)
         ]);
     }
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-
-    }
+    public function create() {}
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreStudentRequest $request)
     {
         $validated = $request->all();
-        if($request->file('studentImg'))
+        if($request->file('student_img'))
         {
-            $validated['studentImg'] = handleFileUpload($request->file("studentImg"), 'store', 'studentsImg');
+            $validated['student_img'] = handleFileUpload($request->file("student_img"), 'store', 'studentsImg');
         }
         $student = Student::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'certificate' => $validated['certificate'],
-            'student_img' => $validated['studentImg'],
-            'birth_date' => $validated['birthDate'],
-            'quran_memorized_parts' => $validated['quranMemorizedParts'],
-            'quran_passed_parts' => $validated['quranPassedParts'],
-            'phone_number' => $validated['phoneNumber'],
+            'student_img' => $validated['student_img'],
+            'birth_date' => $validated['birth_date'],
+            'quran_memorized_parts' => $validated['quran_memorized_parts'],
+            'quran_passed_parts' => $validated['quran_passed_parts'],
+            'phone_number' => $validated['phone_number'],
             'address' => $validated['address'],
-            'enroll_date' => $validated['enrollDate'],
+            'enroll_date' => $validated['enroll_date'],
             'role' => 'student',
-            'reset_password_token' => $validated['resetPasswordToken'],
+            'reset_password_token' => $validated['reset_password_token'],
         ]);
         $token = $student->createToken($validated['name']);
         return response()->json([
-            'student' => $student,
+            'student' => new StudentResource($student),
             'token' => $token->plainTextToken,
         ]);
 
@@ -76,7 +73,7 @@ class StudentController extends Controller
         else
         {
             return response()->json([
-                'student' => $student,
+                'student' => new StudentResource($student),
             ]);
         }
     }
@@ -96,28 +93,28 @@ class StudentController extends Controller
     {
         $validated = $request->all();
         $student = Student::findOrFail($id);
-        if($request->file('studentImg'))
+        if($request->file('student_img'))
         {
-            $validated['studentImg'] = handleFileUpload($request->file("studentImg"), 'update', 'studentsImg', $student->student_img);
+            $validated['student_img'] = handleFileUpload($request->file("student_img"), 'update', 'studentsImg', $student->student_img);
         }
         $student->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'],
             'certificate' => $validated['certificate'],
-            'student_img' => $validated['studentImg'],
-            'birth_date' => $validated['birthDate'],
-            'quran_memorized_parts' => $validated['quranMemorizedParts'],
-            'quran_passed_parts' => $validated['quranPassedParts'],
-            'phone_number' => $validated['phoneNumber'],
+            'student_img' => $validated['student_img'],
+            'birth_date' => $validated['birth_date'],
+            'quran_memorized_parts' => $validated['quran_memorized_parts'],
+            'quran_passed_parts' => $validated['quran_passed_parts'],
+            'phone_number' => $validated['phone_number'],
             'address' => $validated['address'],
-            'enroll_date' => $validated['enrollDate'],
+            'enroll_date' => $validated['enroll_date'],
             'role' => 'student',
-            'reset_password_token' => $validated['resetPasswordToken'],
+            'reset_password_token' => $validated['reset_password_token'],
         ]);
         return response()->json([
-            'student' => $student,
-            'messsage' => "students updated",
+            'student' => new StudentResource($student),
+            'messsage' => "student updated",
         ]);
     }
 
@@ -157,7 +154,7 @@ class StudentController extends Controller
     {
         $student = $request->user();
         return response()->json([
-            'student' =>  $student,
+            'student' => new StudentResource($student),
         ]);
     }
 

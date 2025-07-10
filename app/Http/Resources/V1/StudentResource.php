@@ -14,21 +14,25 @@ class StudentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $data = getStudentRelations($this->name);
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,
             'certificate' => $this->certificate,
-            'studentImg' => $this->student_img,
-            'birthDate' => $this->birth_date,
-            'quranMemorizedParts' => $this->quran_memorized_parts,
-            'quranPassedParts' => $this->quran_passed_parts,
-            'phoneNumber' => $this->phone_number,
+            'student_img' => $this->student_img,
+            'birth_date' => $this->birth_date,
+            'quran_memorized_parts' => $this->quran_memorized_parts,
+            'quran_passed_parts' => $this->quran_passed_parts,
+            'phone_number' => $this->phone_number,
             'address' => $this->address,
-            'enrollDate' => $this->enroll_date,
+            'enroll_date' => $this->enroll_date,
             'role' => $this->role,
-            'resetPasswordToken' => $this->reset_password_token,
+            'reset_password_token' => $this->reset_password_token,
+            'attendances' =>$data->attendances,
+            'related_courses' =>$data->courses,
+            'related_exams' =>$data->studentExams,
         ];
     }
 }

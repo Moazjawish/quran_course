@@ -23,18 +23,17 @@ class UpdateInstructorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'regex:/(^([a-zA-Z]+)(\d+)?$)/u','min:7', Rule::unique('instructors')->ignore($this->id)],
+            'name' => ['required', Rule::unique('instructors'), 'regex:/(^([a-zA-Z]+)(\d+)?$)/u','min:7'],
             'email' => ['required',  Rule::unique('instructors')->ignore($this->id) ],
             'password' => ['required', 'min:5', 'confirmed'],
             'certificate' => ['required'],
-            'instructorImg' => ['required'],
-            'phoneNumber' => ['required','regex:/(0)[0-9]{9}/'],
-            'quranMemorizedParts' => [''],
-            'quranPassedParts' => [''],
-            'religiousQualifications' => [''],
+            'instructor_img' => ['required'],
+            'phone_number' => ['required','regex:/(0)[0-9]{9}/'],
+            'quran_memorized_parts' => [''],
+            'quran_passed_parts' => [''],
+            'religious_qualifications' => [''],
             'address' => ['required'],
-            'birthDate' => ['required'],
-            'isAdmin' => ['required'],
+            'birth_date' => ['required','date' ,'date_format:Y-m-d'],
         ];
     }
 

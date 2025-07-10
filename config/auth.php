@@ -51,6 +51,11 @@ return [
             'driver' => 'sanctum',
             'provider' => 'instructors',
         ],
+
+        'api' => [
+                'driver' => 'sanctum',
+                'provider' => 'users',
+        ],
     ],
 
     /*
@@ -120,6 +125,13 @@ return [
         // ],
         'students' => [ // ← this must exactly match the one you call in Password::broker()
             'provider' => 'students',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'instructors' => [ // ← this must exactly match the one you call in Password::broker()
+            'provider' => 'instructors',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

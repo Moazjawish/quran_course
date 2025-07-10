@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Notifications\PasswordResetLinkNotificationation;
-use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
+use App\Notifications\StudentResetPasswordNotification;
 use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -12,17 +12,18 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Student extends  Authenticatable implements CanResetPassword {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
-    use HasApiTokens, HasFactory, Notifiable, PasswordsCanResetPassword;
+    use HasApiTokens, HasFactory, Notifiable, CanResetPasswordTrait;
 
-    protected $fillable = ['name', 'password'];
+    protected $guarded = [];
 
     public function attendances()
     {
-        return $this->belongsTo(Attendance::class);
+        return $this->hasMany(Attendance::class);
     }
+
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'course_student');
+        return $this->belongsToMany(Course::class, 'course_student','student_id','course_id');
     }
 
     public function studentExams()
@@ -30,6 +31,10 @@ class Student extends  Authenticatable implements CanResetPassword {
         return $this->belongsTo(StudentExam::class);
     }
 
+    public function studentRecitation()
+    {
+        return $this->belongsTo(StudentRecitation::class, 'student_id');
+    }
 
 /**
  * Get the attributes that should be cast.
@@ -44,8 +49,8 @@ protected function casts(): array
     }
 
 
-public function sendPasswordResetNotification($token)
-{
-    $this->notify(new PasswordResetLinkNotificationation($token));
-}
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new StudentResetPasswordNotification($token));
+    }
 }

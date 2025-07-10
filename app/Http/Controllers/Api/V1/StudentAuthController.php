@@ -34,7 +34,7 @@ class StudentAuthController extends Controller
     {
         $request->user()->tokens()->delete();
         return [
-            'message' => 'student logout successfuly',
+            'message' => $request->user()->name .' logout successfuly',
         ];
     }
     // ............
@@ -48,17 +48,9 @@ class StudentAuthController extends Controller
             $request->only('email')
         );
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json([
-                'message' => 'Reset link sent.',
-                'status' => $status
-            ]);
-        }
-
-        return response()->json([
-            'message' => trans($status),
-            'status' => $status
-        ]);
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'Password reset link sent.'])
+            : response()->json(['message' => 'Unable to send reset link.'], 400);
     }
 
     // user click the link that send in email
@@ -66,23 +58,22 @@ class StudentAuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'token' => 'required',
-            'password' => 'required|confirmed'
+            'token' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         $status = Password::broker('students')->reset(
-            $request->only(['email', 'token', 'password', 'password_confirmation']),
-            function($student, $password){
-                $student->forceFill([
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
                     'password' => Hash::make($password),
-                    'remember_token' => Str::random(60),
                 ])->save();
             }
         );
 
         return $status === Password::PASSWORD_RESET
             ? response()->json(['message' => 'Password has been reset.'])
-            : response()->json(['message' => 'Reset failed.'], 400);
+            : response()->json(['message' => 'Failed to reset password.'], 400);
     }
 
 }

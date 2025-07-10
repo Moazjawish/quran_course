@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Http\Requests\StoreExamRequest;
 use App\Http\Requests\UpdateExamRequest;
-use App\Http\Resources\V1\ExamCollection;
 use App\Http\Resources\V1\ExamResource;
 
 class ExamController extends Controller
@@ -18,7 +17,9 @@ class ExamController extends Controller
     public function index()
     {
         $exams = Exam::all();
-        return new ExamCollection($exams);
+        return response()->json([
+            'exams' => ExamResource::collection($exams),
+        ]);
     }
 
     /**
@@ -35,20 +36,33 @@ class ExamController extends Controller
     public function store(StoreExamRequest $request)
     {
         $validated = $request->all();
-        Exam::create([
-            'course_id'=> $validated['courseId'],
-            'exam_date'=> $validated['examDate'],
-            'max_mark'=> $validated['maxMark'],
-            'passing_mark'=> $validated['passingMark'],
+        $exam = Exam::create([
+            'course_id'=> $validated['course_id'],
+            'title'=> $validated['title'],
+            'exam_date'=> $validated['exam_date'],
+            'max_mark'=> $validated['max_mark'],
+            'passing_mark'=> $validated['passing_mark'],
+        ]);
+        return response()->json([
+            'exam' => new ExamResource($exam),
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Exam $exam)
+    public function show($id)
     {
-        return new ExamResource($exam);
+        $exam = Exam::findOrFail($id);
+        if(!$exam)
+        {
+            return response()->json([
+                'message' => "exam is not found"
+            ]);
+        }
+        return response()->json([
+            'exam' => new ExamResource($exam),
+        ]);
     }
 
     /**
@@ -62,22 +76,39 @@ class ExamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateExamRequest $request, Exam $exam)
+    public function update(UpdateExamRequest $request, $id)
     {
+        $exam = Exam::findOrFail($id);
         $validated = $request->all();
         $exam->update([
-            'course_id'=> $validated['courseId'],
-            'exam_date'=> $validated['examDate'],
-            'max_mark'=> $validated['maxMark'],
-            'passing_mark'=> $validated['passingMark'],
+            'course_id'=> $validated['course_id'],
+            'title'=> $validated['title'],
+            'exam_date'=> $validated['exam_date'],
+            'max_mark'=> $validated['max_mark'],
+            'passing_mark'=> $validated['passing_mark'],
+        ]);
+        return response()->json([
+            'exam' => new ExamResource($exam),
+            'message' => 'exam is updated successfully'
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Exam $exam)
+    public function destroy($id)
     {
+        $exam = Exam::findOrFail($id);
+        if(!$exam)
+        {
+            return response()->json([
+                'message' => "exam is not found"
+            ]);
+        }
         $exam->delete();
+        return response()->json([
+            'message' => "exam is deleted succssfully"
+        ]);
+
     }
 }

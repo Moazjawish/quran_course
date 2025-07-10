@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreLessonRequest extends FormRequest
 {
@@ -22,11 +22,9 @@ class StoreLessonRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'courseId' => ['required'],
-            'instructorId' => ['required'],
-            'lessonTitle' => ['required', 'min:3'],
-            'lessonDate' => ['required', 'min:3'],
-            'isTahfeezCourse' => ['requierd'],
+            'course_id' => ['required','exists:courses,id'],
+            'instructor_id' => ['required','exists:instructors,id'],
+            'lesson_title' => ['required', 'min:3', Rule::unique('lessons')],
         ];
     }
 

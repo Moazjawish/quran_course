@@ -12,7 +12,7 @@ class CourseFile extends Model
     protected $guarded = [];
     public function courses()
     {
-        return $this->hasMany(Course::class);
+        return $this->belongsTo(Course::class, 'course_id');
     }
 }
 

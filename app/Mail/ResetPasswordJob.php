@@ -26,12 +26,12 @@ class ResetPasswordJob extends Mailable
     /**
      * Get the message envelope.
      */
-    // public function envelope(): Envelope
-    // {
-    //     return new Envelope(
-    //         // subject: 'Moaz Reset Password Job',
-    //     );
-    // }
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: 'Moaz Reset Password Job',
+        );
+    }
 
     public function build()
     {
@@ -42,12 +42,12 @@ class ResetPasswordJob extends Mailable
     /**
      * Get the message content definition.
      */
-    // public function content(): Content
-    // {
-    //     return new Content(
-    //         // view: '/resources/emails/verify_email.php'
-    //     );
-    // }
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails/reset-password.blade.php'
+        );
+    }
 
     /**
      * Get the attachments for the message.

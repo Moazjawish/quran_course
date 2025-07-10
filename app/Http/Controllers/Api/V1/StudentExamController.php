@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\StudentExam;
 use App\Http\Requests\StoreStudentExamRequest;
 use App\Http\Requests\UpdateStudentExamRequest;
-use App\Http\Resources\V1\StudentExamCollection;
 use App\Http\Resources\V1\StudentExamResource;
 
 class StudentExamController extends Controller
@@ -17,7 +16,9 @@ class StudentExamController extends Controller
     public function index()
     {
         $studentExams = StudentExam::all();
-        return new StudentExamCollection($studentExams);
+        return response()->json([
+            'studentExams' => StudentExamResource::collection($studentExams),
+        ]);
     }
 
     /**
@@ -34,19 +35,31 @@ class StudentExamController extends Controller
     public function store(StoreStudentExamRequest $request)
     {
         $validated = $request->all();
-        StudentExam::create([
-            'student_id' => $validated['studentId'],
-            'exam_id' => $validated['examId'],
-            'student_mark' => $validated['studentMark'],
+        $studentExam = StudentExam::create([
+            'student_id' => $validated['student_id'],
+            'exam_id' => $validated['exam_id'],
+            'student_mark' => $validated['student_mark'],
+        ]);
+        return response()->json([
+            'studentExam' => new  StudentExamResource($studentExam),
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(StudentExam $studentExam)
+    public function show($id)
     {
-        return new StudentExamResource($studentExam);
+        $studentExam = StudentExam::findOrFail($id);
+        if(!$studentExam)
+        {
+            return response()->json([
+                'message' => "exams is not found",
+            ]);
+        }
+        return response()->json([
+            'studentExam' => new  StudentExamResource($studentExam),
+        ]);
     }
 
     /**
@@ -60,21 +73,36 @@ class StudentExamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentExamRequest $request, StudentExam $studentExam)
+    public function update(UpdateStudentExamRequest $request, $id)
     {
+        $studentExam = StudentExam::findOrFail($id);
         $validated = $request->all();
         $studentExam->update([
-            'student_id' => $validated['studentId'],
-            'exam_id' => $validated['examId'],
-            'student_mark' => $validated['studentMark'],
+            'student_id' => $validated['student_id'],
+            'exam_id' => $validated['exam_id'],
+            'student_mark' => $validated['student_mark'],
+        ]);
+        return response()->json([
+            'studentExam' => new  StudentExamResource($studentExam),
+            'message' => "exams is updated successfully",
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(StudentExam $studentExam)
+    public function destroy($id)
     {
+        $studentExam = StudentExam::findOrFail($id);
+        if(!$studentExam)
+        {
+            return response()->json([
+                'message' => "exams is not found",
+            ]);
+        }
         $studentExam->delete();
+        return response()->json([
+            'message' => "exams is deleted successfully",
+        ]);
     }
 }

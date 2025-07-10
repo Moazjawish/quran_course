@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,14 +28,13 @@ class StoreInstructorRequest extends FormRequest
             'email' => ['required', Rule::unique('instructors') ],
             'password' => ['required', 'min:5', 'confirmed'],
             'certificate' => ['required'],
-            'instructorImg' => ['required'],
-            'phoneNumber' => ['required','regex:/(0)[0-9]{9}/'],
-            'quranMemorizedParts' => [''],
-            'quranPassedParts' => [''],
-            'religiousQualifications' => [''],
+            'instructor_img' => ['required'],
+            'phone_number' => ['required','regex:/(0)[0-9]{9}/'],
+            'quran_memorized_parts' => [''],
+            'quran_passed_parts' => [''],
+            'religious_qualifications' => [''],
             'address' => ['required'],
-            'birthDate' => ['required'],
-            'isAdmin' => ['required'],
+            'birth_date' => ['required','date' ,'date_format:Y-m-d'],
         ];
     }
 

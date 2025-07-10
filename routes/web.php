@@ -1,6 +1,4 @@
 <?php
-
-use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,6 +8,8 @@ Route::get('/welcome', function () {
     echo("Welcome page.");
 });
 
-Route::get('/reset-password/{token}', function ($token) {
-    return response()->json(['token' => $token]);
-})->name('password.reset');
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
