@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Attendance;
-use App\Http\Requests\StoreAttendanceRequest;
 use App\Http\Requests\UpdateAttendanceRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\AttendanceResourse;
@@ -29,37 +28,26 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        // $lesson = Lesson::findOrFail($lesson_id);
-        // $validated = $request->all();
-            $lesson_iid = $request->lesson_id;
-            // $lesson_courses = Lesson::find($lesson_id)->courses;
-            $lesson_courses = Lesson::find($lesson_iid)->courses;
+            $lesson_id = $request->lesson_id;
+            $lesson_courses = Lesson::find($lesson_id)->courses;
             foreach($lesson_courses as $course)
             {
-                $course_students[] =  $course->students;
+                $course_students[] =  $course->students->toArray();
             }
-            dd($course_students);
             foreach($course_students as $course_student)
             {
-                // dd($course_student->pluck('name'));
-                $attendance = Attendance::create([
-                    'lesson_id' => $lesson_iid,
-                    'student_id' => $course_student->pluck('id')->first(),
-                    'student_attendance' => 0,
-                    'student_attendance_time' =>null,
-                ]);
+                foreach($course_student as $course_std)
+                {
+                    $attendances[] = Attendance::create([
+                        'lesson_id' => $lesson_id,
+                        'student_id' => $course_std['id'],
+                        'student_attendance' => 0,
+                        'student_attendance_time' =>null,
+                    ]);
+                }
             }
-
-        // $attendance = Attendance::create([
-        //     'lesson_id' => $lesson_id,
-        //     'student_id' => $validated['student_id'],
-        //     'student_attendance' => $validated['student_attendance'],
-        //     'student_attendance_time' => $validated['student_attendance_time'],
-        //     ]);
-
-
         return response()->json([
-            'attendance' => new AttendanceResourse($attendance)
+            'attendance' =>  AttendanceResourse::collection($attendances)
         ], 200);
     }
     /*

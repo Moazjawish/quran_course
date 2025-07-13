@@ -91,7 +91,6 @@ Route::group(['prefix' => 'v1'], function(){
     Route::group(['prefix' => 'atten'], function(){
         Route::get('', [AttendanceController::class, 'index']);
         Route::get('/{id} ', [AttendanceController::class, 'show']);
-        // Route::post('store', [AttendanceController::class, 'store']);
         Route::post('store', [AttendanceController::class, 'store']);
         Route::post('update/{id}', [AttendanceController::class, 'update']);
         Route::delete('destroy/{id}', [AttendanceController::class, 'destroy']);
