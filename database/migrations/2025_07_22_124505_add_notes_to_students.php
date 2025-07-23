@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('attendances', function (Blueprint $table) {
-            $table->dropForeign('attendances_instructor_id_foreign');
-            $table->dropColumn('instructor_id');
+        Schema::table('students', function (Blueprint $table) {
+            $table->string('notes')->after('enroll_date');
         });
     }
 
@@ -22,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('attendances', function (Blueprint $table) {
+        Schema::table('students', function (Blueprint $table) {
             //
         });
     }

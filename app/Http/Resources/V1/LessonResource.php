@@ -17,8 +17,8 @@ class LessonResource extends JsonResource
         $data = getLessonRelations($this->id);
         return [
             'id' => $this->id,
-            'related_Courses' => $data->courses,
-            'related_instructors' => $data->instructors,
+            'courses' => $data->courses,
+            'instructors' => $data->instructors,
             // 'related_students' => $data->students,
             'lesson_title' => $this->lesson_title,
             'lesson_date' => $this->lesson_date,

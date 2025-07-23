@@ -17,11 +17,11 @@ class ExamResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'relatedCourse' => Course::find($this->course_id),
+            'course' => Course::find($this->course_id),
             "title" => $this->title,
-            'examDate' => $this->exam_date,
-            'maxMark' => $this->max_mark,
-            'passingMark' => $this->passing_mark,
+            'exam_date' => $this->exam_date,
+            'max_mark' => $this->max_mark,
+            'passing_mark' => $this->passing_mark,
         ];
     }
 }

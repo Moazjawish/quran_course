@@ -28,6 +28,7 @@ class StudentAuthController extends Controller
             'token' => $student->createToken('student_token', ['rule:student'])->plainTextToken,
             'message' => 'Login successfully'
         ];
+        
     }
 
     public function logout(Request $request)

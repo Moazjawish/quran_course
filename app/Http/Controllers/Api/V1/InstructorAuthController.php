@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InstructorAuthRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -51,16 +52,11 @@ class InstructorAuthController extends Controller
     }
 
     // user click the link that send in email
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'token' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
+        $validated = $request->all();
         $status = Password::broker('instructors')->reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            $request->only($validated),
             function ($user, $password) {
                 $user->forceFill([
                     'password' => Hash::make($password),

@@ -21,7 +21,7 @@ class InstructorResource extends JsonResource
             'email' => $this->email,
             'password' => $this->password,
             'certificate' => $this->certificate,
-            'instructor_img' => $this->instructor_img,
+            'image' => $this->instructor_img,
             'phone_number' => $this->phone_number,
             'quran_memorized_parts' => $this->quran_memorized_parts,
             'quran_passed_parts' => $this->quran_passed_parts,
@@ -29,8 +29,8 @@ class InstructorResource extends JsonResource
             'address' => $this->address,
             'birth_date' => $this->birth_date,
             'role' => $this->role,
-            'relatedCourses' => $data->courses,
-            'relatedLessons' => $data->lessons,
+            'courses' => $data->courses,
+            'lessons' => $data->lessons,
         ];
     }
 }

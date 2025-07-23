@@ -17,9 +17,9 @@ class CourseFilesResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'relatedCourse' => Course::find($this->course_id),
-            'fileName' => $this->file_name,
-            'filePath' => $this->file_path,
+            'course' => Course::find($this->course_id),
+            'file_name' => $this->file_name,
+            'file_path' => $this->file_path,
         ];
     }
 }

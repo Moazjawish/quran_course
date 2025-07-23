@@ -24,7 +24,17 @@ class ResetPasswordRequest extends FormRequest
         return [
             'email' => ['required', 'email'],
             'token' => ['required'],
-            'password' => ['required', 'min:7', 'confirmed'],
+            'password' => ['required', 'confirmed'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'email.required' => 'الرجاء إدخال الإيميل',
+            'email.email' => ' الرجاء إدخال الإيميل بشكل صحيح',
+            'password.required' => 'ادخل كلمة المرور',
+            'password.confirmed' => 'ادخل تأكيد كلمة المرور',
         ];
     }
 }

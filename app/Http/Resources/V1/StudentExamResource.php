@@ -18,9 +18,9 @@ class StudentExamResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'studentId' => Student::find($this->student_id),
-            'examId' => Exam::find($this->exam_id),
-            'studentMark' => $this->student_mark,
+            'student' => Student::find($this->student_id),
+            'exam' => Exam::find($this->exam_id),
+            'student_mark' => $this->student_mark,
         ];
     }
 }

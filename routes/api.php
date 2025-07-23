@@ -20,8 +20,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-// Route::group(['prefix' => 'v1',  'middleware' => 'auth:sanctum'], function(){
-Route::group(['prefix' => 'v1'], function(){
+Route::group(['prefix' => 'v1',  'middleware' => 'auth:sanctum'], function(){
+// Route::group(['prefix' => 'v1'], function(){
 
     // students
     Route::group(['prefix' => 'students'] ,function(){
@@ -138,13 +138,11 @@ Route::group(['prefix' => 'instructors'], function(){
         Route::post('/login' , [InstructorAuthController::class , 'login']);
         Route::middleware('auth:sanctum')->post('/logout' , [InstructorAuthController::class , 'logout']);
 
-        Route::post('forgot-password',[InstructorAuthController::class, 'sendResetLinkEmail']);
-        Route::post('reset-password', [InstructorAuthController::class, 'reset']);
+        Route::post('/forgot-password',[InstructorAuthController::class, 'sendResetLinkEmail']);
+        Route::post('/reset-password', [InstructorAuthController::class, 'reset']);
     });
 
 });
-
-
 
 
 /*
@@ -160,3 +158,4 @@ admin:
     email: admin@gmail.com
     password: 111111
     */
+

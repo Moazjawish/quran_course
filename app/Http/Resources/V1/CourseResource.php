@@ -20,16 +20,16 @@ class CourseResource extends JsonResource
             'type' => $this->type,
             'title' => $this->title,
             'course_start_time' => $this->course_start_time,
-            'startDate' => $this->start_date,
-            'expectedEndDate' => $this->expected_end_date,
+            'start_date' => $this->start_date,
+            'expected_end_date' => $this->expected_end_date,
             "description"=> $this->description,
             "level"=>  $this->level,
             "image"=>  $this->image,
-            'relatedExams' => $data->exams,
-            'courseFiles' => $data->courseFiles,
-            'relatedStudents' => $data->students,
-            'relatedInstructors' => $data->instructors,
-            'relatedLessons' => $data->lessons,
+            'related_exams' => $data->exams,
+            'course_files' => $data->courseFiles,
+            'students' => $data->students,
+            'instructor' => $data->instructors,
+            'lessons' => $data->lessons,
         ];
     }
 }
